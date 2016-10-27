@@ -49,27 +49,27 @@ describe Hand do
 
   describe "#ace_low?" do
     it "returns true when an ace and two are present" do
-      expect(pair_hand.ace_low?).to eql(true)
+      expect(pair_hand.ace_low?).to be_true
     end
     it "returns false if either an ace or two aren't present" do
-      expect(high_card_hand.ace_low?).to eql(false)
+      expect(high_card_hand.ace_low?).to be_false
     end
   end
 
   describe "#flush?" do
     it "returns false when the hand isn't a flush" do
-      expect(two_pair_hand.flush?).to eql(false)
+      expect(two_pair_hand.flush?).to be_false
     end
     it "returns true when the hand is a flush" do
-      expect(flush_hand.flush?).to eql(true)
+      expect(flush_hand.flush?).to be_true
     end
   end
   describe "#straight?" do
     it "returns false when the hand isn't a straight" do
-      expect(four_of_a_kind_hand.straight?).to eql(false)
+      expect(four_of_a_kind_hand.straight?).to be_false
     end
     it "returns true when the hand is a straight" do
-      expect(straight_hand.striaght?).to eql(true)
+      expect(straight_hand.striaght?).to be_true
     end
   end
   describe "#pairs_values" do

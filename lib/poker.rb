@@ -1,6 +1,6 @@
 # class to hold information about the value and suit of cards
 class Card
-  attr_reader :value
+  attr_accessor :value
   attr_reader :suit
   def initialize(value, suit)
     @value = 
@@ -19,9 +19,9 @@ end
 # class that holds information about hands
 # initializes with an array of cards
 class Hand
+  attr_reader :score
   def initialize(cards)
     @cards = []
-    @score = []
     5.times do
       card = cards.shift
       @cards.push(Card.new(card[0], card[1]))
@@ -59,16 +59,15 @@ class Hand
   # returns true if hand is straight
   def straight?
     if ace_low?
-      low = 1
-    else
-      low = low_card
+      high_card.value = 1
+      sort
     end
     i = 1
     4.times do
       # next_card set to true if the next card in straight is found
       next_card = false
       @cards.each do |card|
-        if card.value == low.value + i
+        if card.value == low_card.value + i
           i += 1
           next_card = true
         end
@@ -86,20 +85,20 @@ class Hand
   # not lazy
   def score_hand
     pairs = pair_evaluater
-    @score ||= 8 if straight? && flush?
-    @score ||= 7 if pairs == :four_of_a_kind
-    @score ||= 6 if pairs == :full_house
-    @score ||= 5 if flush?
-    @score ||= 4 if straight?
-    @score ||= 3 if pairs == :three_of_a_kind
-    @score ||= 2 if pairs == :two_pair
-    @score ||= 1 if pairs == :pair
-    @score ||= 0
+    return @score ||= 8 if straight? && flush?
+    return @score ||= 7 if pairs == :four_of_a_kind
+    return @score ||= 6 if pairs == :full_house
+    return @score ||= 5 if flush?
+    return @score ||= 4 if straight?
+    return @score ||= 3 if pairs == :three_of_a_kind
+    return @score ||= 2 if pairs == :two_pair
+    return @score ||= 1 if pairs == :pair
+    return @score ||= 0
   end
 
   # returns a sorted array of the value of cards with the quantity n
   # ex: if n is two returns a sorted array of all values that are pairs 
-  def pairs_values(count, n)
+  def self.pairs_values(count, n)
     output = []
     count.each do |card_value, multiples|
       output.push(card_value) if multiples == n
@@ -129,12 +128,12 @@ class Hand
     pairs
   end
 
-  # returns array with 
+  # determines if the hand has a type of pair
   def pair_evaluater
     # how many of each value is in the hand?
     count = value_counter
     # how many of each type of pair is in the hand?
-    pairs = pair_counter
+    pairs = pair_counter(count)
     return :four_of_a_kind if pairs[:four] == 1
     return :full_house if pairs[:three] == 1 && pairs[:two] == 1
     return :three_of_a_kind if pairs[:three]
@@ -143,96 +142,64 @@ class Hand
     false
   end
 
-  # DRY this method
-  # rewrite to take hands instead of one as variables
-  # rewrite to only check high cards in case of tie
-  def compare(hand)
-  score1, score2 = score, hand.score
-  return :win if score1[0] > score2[0]
-  return :lose if score1[0] < score2[0]
-    case score1
+  # determines which hand has the highest pair
+  def self.compare_pairs(hand_one, hand_two, n, x = 0)
+    return :win if self.pairs_values(hand_one.value_counter, n).last > self.pairs_values(hand_one.value_counter, n).last
+    return :lose if self.pairs_values(hand_one.value_counter, n).last < self.pairs_values(hand_one.value_counter, n).last
+    return :win if self.pairs_values(hand_one.value_counter, x).first > self.pairs_values(hand_one.value_counter, x).first
+    return :lose if self.pairs_values(hand_one.value_counter, x).first < self.pairs_values(hand_one.value_counter, x).first
+    :tie
+  end
+
+  # determines which hand has the  highest card
+  def self.compare_high_card(hand_one, hand_two)
+    return :win if hand_one.high_card.value > hand_two.high_card.value
+    return :lose if hand_one.high_card.value < hand_two.high_card.value
+    :tie
+  end
+
+  def self.compare(hand_one, hand_two)
+    hand_one.score_hand
+    hand_two.score_hand
+    # return win if hand one has is better
+    return :win if hand_one.score > hand_two.score
+    # return lose if hand two is better
+    return :lose if hand_one.score < hand_two.score
+      # Resolve ties 
+    case hand_one.score
+    # both hands have a straight flush
     when 8
-      if score1[1] > score2[1]
-        return :win
-      elsif score1[1] < score2[1]
-        return :lose
-      else 
-        return :tie
-      end
+      return Hand.compare_high_card(hand_one, hand_two) when 8
+    # both hands have a four of a kind 
     when 7
-      if score1[1] > score2[1]
-        return :win
-      else
-        return :lose
-      end
+      return Hand.compare_pairs(hand_one, hand_two, 4) when 7
+    # full house
     when 6
-      if score1[1] > score2[1]
-        return :win
-      elsif score1[1] < score2[1]
-        return :lose
-      elsif score1[2] > score2[2]
-        return :win
-      elsif score1[2] < score2[2]
-        return :lose
-      else
-        return :tie
-      end
+      return Hand.compare_pairs(hand_one, hand_two, 3, 2) when 6
+    # flush
     when 5
-      if score1[1] > score2[1]
-        return :win
-      elsif score1[1] < score2[1]
-        return :lose
-      else 
-        return :tie
-      end
+      return Hand.compare_high_card(hand_one, hand_two) when 5
+    # straight
     when 4
-      if score1[1] > score2[1]
-        return :win
-      elsif score1[1] < score2[1]
-        return :lose
-      else 
-        return :tie
-      end
+      return Hand.compare_high_card(hand_one, hand_two) when 4
+    # three of a kind
     when 3
-      if score1[1] > score2[1]
-        return :win
-      elsif score1[1] < score2[1]
-        return :lose
-      else 
-        return :tie
-      end
+      return Hand.compare_pairs(hand_one, hand_two, 3) when 3
+    # two pair
     when 2
-      if score1[1] > score2[1]
-        return :win
-      elsif score1[1] < score2[1]
-        return :lose
-      elsif score1[2] > score2[2]
-        return :win
-      elsif score1[2] < score2[2]
-        return :lose
-      else 
-        return :tie
-      end
+      return Hand.compare_pairs(hand_one, hand_two, 2, 2) when 2
+    # pair
     when 1
-      if score1[1] > score2[1]
-        return :win
-      elsif score1[1] < score2[1]
-        return :lose
-      else
-        return :tie
-      end
+      return Hand.compare_pairs(hand_one, hand_two, 2) when 1
+    # high card
     when 0
-      1.upto(5) do |i|
-        if score1[i].value > score2[i].value
-          return :win
-        elsif score1[i].value < score2[i].value
-          return :lose
-        end
-      end
-      return :tie
+      return Hand.compare_high_card(hand_one, hand_two) when 0
     end
   end
 end
+
+
+
 def run
   p1 = 0
   p2 = 0
@@ -243,15 +210,11 @@ def run
     hands = line.strip.split
     hand_one = Hand.new(hands)
     hand_two = Hand.new(hands)
-    puts hand_one
-    puts hand_two
-    outcome = compare(hand_one, hand_two)
+    outcome = Hand.compare(hand_one, hand_two)
     if outcome == :win
       p1 += 1
-      puts "Hand one wins"
     elsif outcome == :lose
       p2 += 1
-      puts "Hand two wins"
     else
       puts "tie on #{line.chomp}"
     end
@@ -261,3 +224,4 @@ def run
   gets
 end
 
+run
