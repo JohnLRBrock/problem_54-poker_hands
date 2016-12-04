@@ -75,10 +75,69 @@ describe Hand do
       expect(Hand.pairs_values(pair_count, 2)).to eql([6])
     end
   end
-  describe "#score_hand" do; end
+  describe "#score_hand" do
+    context "high_card_hand" do
+      it "sets @score to 0" do
+        high_card_hand.score_hand
+        expect(high_card_hand.score).to eql(0)
+      end
+    end
+    context "pair_hand" do
+      it "sets @score to 1" do
+       pair_hand.score_hand
+       expect(pair_hand.score).to eql(1)
+     end
+    end
+    context "two_pair_hand" do
+      it "sets @score to 2" do
+        two_pair_hand.score_hand
+        expect(two_pair_hand.score).to eql(2)
+      end
+    end
+    context "three_pair_hand" do
+      it "sets @score to 3" do
+        three_of_a_kind_hand.score_hand
+        expect(three_of_a_kind_hand.score).to eql(3)
+      end
+    end
+    context "straight_hand" do
+      it "sets @score to 4" do
+        straight_hand.score_hand
+        expect(straight_hand.score).to eql(4)
+      end
+    end
+    context "flush_hand" do
+      it "sets @score to 5" do
+        flush_hand.score_hand
+        expect(flush_hand.score).to eql(5)
+      end
+    end
+    context "full_house_hand" do
+      it "sets @score to 6" do
+        full_house_hand.score_hand
+        expect(full_house_hand.score).to eql(6)
+      end
+    end
+    context "four_of_a_kind_hand" do
+      it "sets @score to 7" do
+        four_of_a_kind_hand.score_hand
+        expect(four_of_a_kind_hand.score).to eql(7)
+      end
+    end
+    context "straight_flush_hand" do
+      it "sets @score to 8" do
+        straight_flush_hand.score_hand
+        expect(straight_flush_hand.score).to eql(8)
+      end
+    end
+  end
+
+  describe "#pair_evaluater" do; end
+
+  
   describe "#value_counter" do; end
   describe "#pair_counter" do; end
-  describe "#pair_evaluater" do; end
+  
   describe ".compare_pairs" do; end
-  describe "#compare" do; end
+  describe ".compare" do; end
 end

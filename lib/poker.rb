@@ -85,7 +85,7 @@ class Hand
     return @score ||= 6 if pairs == :full_house
     return @score ||= 5 if flush?
     return @score ||= 4 if straight?
-    return @score ||= 3 if pairs == :three_of_a_kind
+    #return @score ||= 3 if pairs == :three_of_a_kind
     return @score ||= 2 if pairs == :two_pair
     return @score ||= 1 if pairs == :pair
     return @score ||= 0
@@ -210,4 +210,4 @@ def run
   gets
 end
 
-run
+#run
