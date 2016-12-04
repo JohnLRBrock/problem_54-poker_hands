@@ -79,6 +79,6 @@ describe Hand do
   describe "#value_counter" do; end
   describe "#pair_counter" do; end
   describe "#pair_evaluater" do; end
-  describe ".compare_pairs"
+  describe ".compare_pairs" do; end
   describe "#compare" do; end
 end
