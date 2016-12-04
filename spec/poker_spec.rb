@@ -45,8 +45,6 @@ describe Hand do
     end
   end
 
-  describe "#sort" do; end
-
   describe "#ace_low?" do
     it "returns true when an ace and two are present" do
       expect(pair_hand.ace_low?).to be(true)
@@ -74,7 +72,7 @@ describe Hand do
   end
   describe "#pairs_values" do
     it "searches a count-hash for values with quantity of n" do
-      expect(pairs_values(pair_count, 2)).to eql([6])
+      expect(Hand.pairs_values(pair_count, 2)).to eql([6])
     end
   end
   describe "#score_hand" do; end
