@@ -14,10 +14,13 @@ class Card
       end
     @suit = suit
   end
+  def to_s
+    @value.to_s + @suit.to_s
+  end
 end
 
 # class that holds information about hands
-# initializes with an array of cards
+# initializes with an array of at least 5 cards
 class Hand
   attr_reader :score
   def initialize(cards)
@@ -27,11 +30,12 @@ class Hand
       @cards.push(Card.new(card[0], card[1]))
     end
     sort
+    to_s
   end
 
   def to_s
     string = ''
-    @cards.each { |card| string << card.value << card.suit << ' '}
+    @cards.each { |card| string << card.to_s << ' '}
     string
   end
   # returns the card with the lowest value in the hand
@@ -56,30 +60,21 @@ class Hand
     @cards.each { |card| bool = false unless @cards[0].suit == card.suit }
     bool
   end
+
   # returns true if hand is straight
   def straight?
+    # if ace is low, set the value of the ace to 1
     if ace_low?
       high_card.value = 1
       sort
     end
-    i = 1
-    4.times do
-      # next_card set to true if the next card in straight is found
+    1.upto(4) do |i|
       next_card = false
-      @cards.each do |card|
-        if card.value == low_card.value + i
-          i += 1
-          next_card = true
-        end
-      end
+      # if the next card in order is found, set next_card to true
+      @cards.each { |card| next_card = true if card.value == low_card.value + i }
       return false unless next_card
-      # reset next_card to search for the next card
-      next_card = false
     end
-    # no false is returned so the hand must be straight
-
-    # if ace is low, set the value of the ace to 1
-
+    true
   end
 
   # not lazy
@@ -168,32 +163,23 @@ class Hand
       # Resolve ties 
     case hand_one.score
     # both hands have a straight flush
-    when 8
-      return Hand.compare_high_card(hand_one, hand_two) when 8
+    when 8 then return Hand.compare_high_card(hand_one, hand_two)
     # both hands have a four of a kind 
-    when 7
-      return Hand.compare_pairs(hand_one, hand_two, 4) when 7
+    when 7 then return Hand.compare_pairs(hand_one, hand_two, 4)
     # full house
-    when 6
-      return Hand.compare_pairs(hand_one, hand_two, 3, 2) when 6
+    when 6 then return Hand.compare_pairs(hand_one, hand_two, 3, 2)
     # flush
-    when 5
-      return Hand.compare_high_card(hand_one, hand_two) when 5
+    when 5 then return Hand.compare_high_card(hand_one, hand_two)
     # straight
-    when 4
-      return Hand.compare_high_card(hand_one, hand_two) when 4
+    when 4 then return Hand.compare_high_card(hand_one, hand_two)
     # three of a kind
-    when 3
-      return Hand.compare_pairs(hand_one, hand_two, 3) when 3
+    when 3 then return Hand.compare_pairs(hand_one, hand_two, 3)
     # two pair
-    when 2
-      return Hand.compare_pairs(hand_one, hand_two, 2, 2) when 2
+    when 2 then return Hand.compare_pairs(hand_one, hand_two, 2, 2)
     # pair
-    when 1
-      return Hand.compare_pairs(hand_one, hand_two, 2) when 1
+    when 1 then return Hand.compare_pairs(hand_one, hand_two, 2)
     # high card
-    when 0
-      return Hand.compare_high_card(hand_one, hand_two) when 0
+    when 0 then return Hand.compare_high_card(hand_one, hand_two)
     end
   end
 end
@@ -223,5 +209,3 @@ def run
   puts 'Press enter to quit'
   gets
 end
-
-run
