@@ -70,7 +70,7 @@ describe Hand do
       expect(straight_hand.straight?).to be(true)
     end
   end
-  describe "#pairs_values" do
+  describe ".pairs_values" do
     it "searches a count-hash for values with quantity of n" do
       expect(Hand.pairs_values(pair_count, 2)).to eql([6])
     end
@@ -79,5 +79,6 @@ describe Hand do
   describe "#value_counter" do; end
   describe "#pair_counter" do; end
   describe "#pair_evaluater" do; end
+  describe ".compare_pairs"
   describe "#compare" do; end
 end

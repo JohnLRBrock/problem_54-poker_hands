@@ -209,3 +209,5 @@ def run
   puts 'Press enter to quit'
   gets
 end
+
+run
