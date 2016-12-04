@@ -189,3 +189,9 @@ describe Hand do
   describe ".compare_pairs" do; end
   describe ".compare" do; end
 end
+
+describe "#run" do
+  it "returns 376" do
+    expect(run).to eql(376)
+  end
+end

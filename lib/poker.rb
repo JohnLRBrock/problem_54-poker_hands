@@ -184,8 +184,6 @@ class Hand
   end
 end
 
-
-
 def run
   p1 = 0
   p2 = 0
@@ -206,8 +204,5 @@ def run
     end
   end
   puts p1, p2
-  puts 'Press enter to quit'
-  gets
+  p1
 end
-
-run
