@@ -16,13 +16,14 @@ describe Hand do
   let(:high_card_hand)      { Hand.new(['3H', '6C', 'JS', 'TC', '8D']) }
   let(:pair_hand)           { Hand.new(['6H', 'AH', '6C', 'JS', '2H']) }
   let(:two_pair_hand)       { Hand.new(['KD', 'KC', 'QH', 'QS', 'JD']) }
-  let(:three_of_a_kind_hand){ Hand.new(['AC', 'AH', '9S', '8D', '7C']) }
+  let(:three_of_a_kind_hand){ Hand.new(['AC', 'AH', 'AS', '8D', '7C']) }
   let(:straight_hand)       { Hand.new(['5H', '6C', '7D', '8S', '9H']) }
   let(:flush_hand)          { Hand.new(['2H', '4H', '6H', '8H', 'KH']) }
   let(:full_house_hand)     { Hand.new(['AS', 'AD', 'AC', 'KH', 'KS']) }
   let(:four_of_a_kind_hand) { Hand.new(['AH', 'AC', 'AD', 'AS', '2H']) }
   let(:straight_flush_hand) { Hand.new(['5S', '6S', '7S', '8S', '9S']) }
   let(:pair_count)          { {6 => 2, 11 => 1, 14 => 1, 2 => 1} }
+  let(:two_pair_count)      { {11=>1, 12=>2, 13=>2} }
   describe "#low_card" do
     it "returns '3H'" do
       expect(high_card_hand.low_card.value).to eql(3)
@@ -132,11 +133,58 @@ describe Hand do
     end
   end
 
-  describe "#pair_evaluater" do; end
+  describe "#pair_evaluater" do
+    context "high_card_hand" do
+      it "returns" do
+        expect(high_card_hand.pair_evaluater).to eql(false)
+      end
+    end
+    context "pair_hand" do
+      it "returns" do
+        expect(pair_hand.pair_evaluater).to eql(:pair)
+      end
+    end
+    context "two_pair_hand" do
+      it "returns" do
+        expect(two_pair_hand.pair_evaluater).to eql(:two_pair)
+      end
+    end
+    context "three_of_a_kind_hand" do
+      it "returns" do
+        expect(three_of_a_kind_hand.pair_evaluater).to eql(:three_of_a_kind)
+      end
+    end
+    context "straight_hand" do
+      it "returns" do
+        expect(straight_hand.pair_evaluater).to eql(false)
+      end
+    end
+    context "flush_hand" do
+      it "returns" do
+        expect(flush_hand.pair_evaluater).to eql(false)
+      end
+    end
+    context "full_house_hand" do
+      it "returns" do
+        expect(full_house_hand.pair_evaluater).to eql(:full_house)
+      end
+    end
+    context "four_of_a_kind_hand" do
+      it "returns" do
+        expect(four_of_a_kind_hand.pair_evaluater).to eql(:four_of_a_kind)
+      end
+    end
+    context "straight_flush_hand" do
+      it "returns" do
+        expect(straight_flush_hand.pair_evaluater).to eql(false)
+      end
+    end
+  end
 
-  
+  describe "#pair_counter" do
+
+  end
   describe "#value_counter" do; end
-  describe "#pair_counter" do; end
   
   describe ".compare_pairs" do; end
   describe ".compare" do; end
