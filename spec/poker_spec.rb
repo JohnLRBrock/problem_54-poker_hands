@@ -15,13 +15,13 @@ end
 describe Hand do
   let(:high_card_hand)      { Hand.new(['3H', '6C', 'JS', 'TC', '8D']) }
   let(:pair_hand)           { Hand.new(['6H', 'AH', '6C', 'JS', '2H']) }
-  let(:two_pair_hand)       { Hand.new([]) }
-  let(:three_of_a_kind_hand){ Hand.new([]) }
-  let(:straight_hand)       { Hand.new([]) }
-  let(:flush_hand)          { Hand.new([]) }
-  let(:full_house_hand)     { Hand.new([]) }
-  let(:four_of_a_kind_hand) { Hand.new([]) }
-  let(:straight_flush_hand) { Hand.new([]) }
+  let(:two_pair_hand)       { Hand.new(['KD', 'KC', 'QH', 'QS', 'JD']) }
+  let(:three_of_a_kind_hand){ Hand.new(['AC', 'AH', '9S', '8D', '7C']) }
+  let(:straight_hand)       { Hand.new(['5H', '6C', '7D', '8S', '9H']) }
+  let(:flush_hand)          { Hand.new(['2H', '4H', '6H', '8H', 'KH']) }
+  let(:full_house_hand)     { Hand.new(['AS', 'AD', 'AC', 'KH', 'KS']) }
+  let(:four_of_a_kind_hand) { Hand.new(['AH', 'AC', 'AD', 'AS', '2H']) }
+  let(:straight_flush_hand) { Hand.new(['5S', '6S', '7S', '8S', '9S']) }
   let(:pair_count)          { {6 => 2, 11 => 1, 14 => 1, 2 => 1} }
   describe "#low_card" do
     it "returns '3H'" do
