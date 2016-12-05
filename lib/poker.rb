@@ -202,16 +202,11 @@ def run
     hand_one = Hand.new(hands)
     hand_two = Hand.new(hands)
     outcome = Hand.compare(hand_one, hand_two)
-    if outcome == :win
-      p1 += 1
-    elsif outcome == :lose
-      p2 += 1
-    else
-      puts "tie on #{line.chomp}"
-    end
+    p1 += 1 if outcome == :win
+    # there is on instance of a tie, but it's a hand that p2 wins and therefore doesn't matter.
   end
   p1
 end
 
-puts "The answer to Project Euler problem 54 is #{run}.\n Press enter to quit."
+puts "The answer to Project Euler problem 54 is #{run}.\nPress enter to quit."
 gets
