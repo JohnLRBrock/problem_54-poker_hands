@@ -139,6 +139,8 @@ class Hand
 
   # determines which hand has the highest pair
   def self.compare_pairs(hand_one, hand_two, n, x = 0)
+    puts hand_one
+    puts hand_two
     return :win if self.pairs_values(hand_one.value_counter, n).last > self.pairs_values(hand_one.value_counter, n).last
     return :lose if self.pairs_values(hand_one.value_counter, n).last < self.pairs_values(hand_one.value_counter, n).last
     return :win if self.pairs_values(hand_one.value_counter, x).first > self.pairs_values(hand_one.value_counter, x).first

@@ -15,6 +15,8 @@ end
 describe Hand do
   let(:high_card_hand)      { Hand.new(['3H', '6C', 'JS', 'TC', '8D']) }
   let(:pair_hand)           { Hand.new(['6H', 'AH', '6C', 'JS', '2H']) }
+  let(:pair_hand_2)         { Hand.new(['5C', '8H', 'TH', 'TC', 'QS']) }
+  let(:pair_hand_3)         { Hand.new(['4D', '9H', 'JC', 'JS', 'KS']) }
   let(:two_pair_hand)       { Hand.new(['KD', 'KC', 'QH', 'QS', 'JD']) }
   let(:three_of_a_kind_hand){ Hand.new(['AC', 'AH', 'AS', '8D', '7C']) }
   let(:straight_hand)       { Hand.new(['5H', '6C', '7D', '8S', '9H']) }
@@ -23,7 +25,10 @@ describe Hand do
   let(:four_of_a_kind_hand) { Hand.new(['AH', 'AC', 'AD', 'AS', '2H']) }
   let(:straight_flush_hand) { Hand.new(['5S', '6S', '7S', '8S', '9S']) }
   let(:pair_count)          { {6 => 2, 11 => 1, 14 => 1, 2 => 1} }
-  let(:two_pair_count)      { {11=>1, 12=>2, 13=>2} }
+  let(:two_pair_count)      { {11 => 1, 12 => 2, 13 => 2} }
+  let(:pair_count_2)        { {10 => 2, 5 => 1, 8 => 1, 12 => 1} }
+  let(:pair_count_3)        { {11 => 2, 4 => 1, 9 => 1, 13 => 1} }
+  
   describe "#low_card" do
     it "returns '3H'" do
       expect(high_card_hand.low_card.value).to eql(3)
@@ -63,6 +68,7 @@ describe Hand do
       expect(flush_hand.flush?).to be(true)
     end
   end
+
   describe "#straight?" do
     it "returns false when the hand isn't a straight" do
       expect(four_of_a_kind_hand.straight?).to be(false)
@@ -71,11 +77,21 @@ describe Hand do
       expect(straight_hand.straight?).to be(true)
     end
   end
+
+  describe "#value_counter" do
+    context "pair_hand_2" do
+      it "returns {10 => 2, 5 => 1, 8 => 1, 12 => 1}" do
+        expect(pair_hand_two.value_counter).to eql(pair_count_2)
+      end
+    end
+  end
+
   describe ".pairs_values" do
     it "searches a count-hash for values with quantity of n" do
       expect(Hand.pairs_values(pair_count, 2)).to eql([6])
     end
   end
+
   describe "#score_hand" do
     context "high_card_hand" do
       it "sets @score to 0" do
@@ -180,14 +196,6 @@ describe Hand do
       end
     end
   end
-
-  describe "#pair_counter" do
-
-  end
-  describe "#value_counter" do; end
-  
-  describe ".compare_pairs" do; end
-  describe ".compare" do; end
 end
 
 describe "#run" do
