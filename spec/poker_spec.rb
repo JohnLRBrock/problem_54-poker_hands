@@ -80,8 +80,13 @@ describe Hand do
 
   describe "#value_counter" do
     context "pair_hand_2" do
-      it "returns {10 => 2, 5 => 1, 8 => 1, 12 => 1}" do
+      it "returns pair_count_2" do
         expect(pair_hand_2.value_counter).to eql(pair_count_2)
+      end
+    end
+    context "pair_hand_3" do
+      it "returns pair_count_3" do
+        expect(pair_hand_3.value_counter).to eql(pair_count_3)
       end
     end
   end
