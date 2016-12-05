@@ -210,6 +210,8 @@ def run
       puts "tie on #{line.chomp}"
     end
   end
-  puts p1, p2
   p1
 end
+
+puts "The answer to Project Euler problem 54 is #{run}.\n Press enter to quit."
+gets
