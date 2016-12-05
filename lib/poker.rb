@@ -50,8 +50,7 @@ class Hand
   end
   # returns true if a hand has an ace and a two
   def ace_low?
-    return true if high_card.value == 14 && low_card.value == 2
-    return false
+    high_card.value == 14 && low_card.value == 2
   end
 
  # returns true if hand is flush
@@ -63,16 +62,22 @@ class Hand
 
   # returns true if hand is straight
   def straight?
-    # if ace is low, set the value of the ace to 1
-    if ace_low?
-      high_card.value = 1
-      sort
-    end
     1.upto(4) do |i|
       next_card = false
       # if the next card in order is found, set next_card to true
-      @cards.each { |card| next_card = true if card.value == low_card.value + i }
+      @cards.each do |card|
+        if ace_low?
+          next_card = true if card.value == 1 + i
+        else
+          next_card = true if card.value == low_card.value + i
+        end
+      end
       return false unless next_card
+    end
+    # is this an ace-low straight?
+    if ace_low?
+      high_card.value = 1
+      sort
     end
     true
   end
@@ -91,21 +96,6 @@ class Hand
     return @score ||= 0
   end
 
-  # returns a sorted array of the value of cards with the quantity n
-  # ex: if n is two returns a sorted array of all values that are pairs 
-  def self.pairs_values(count, n)
-    output = []
-    count.each do |card_value, multiples|
-      output.push(card_value) if multiples == n
-    end
-    output.sort
-  end
-  # how many of each value are in the hand?
-  def value_counter
-    count = Hash.new(0)
-    @cards.each{ |card| count[card.value] += 1}
-    count
-  end
   # how many of each type of pair are in the hand
   def pair_counter(count)
     pairs = Hash.new(0)
@@ -137,15 +127,30 @@ class Hand
     false
   end
 
+  # how many of each value are in the hand?
+  def value_counter
+    count = Hash.new(0)
+    @cards.each{ |card| count[card.value] += 1}
+    count
+  end
+
+  # returns a sorted array of the value of cards with the quantity n
+  # ex: if n is two returns a sorted array of all values that are pairs 
+  def self.pairs_values(count, n)
+    output = []
+    count.each do |card_value, multiples|
+      output.push(card_value) if multiples == n
+    end
+    output.sort
+  end
+
   # determines which hand has the highest pair
   def self.compare_pairs(hand_one, hand_two, n, x = 0)
-    puts hand_one
-    puts hand_two
-    return :win if self.pairs_values(hand_one.value_counter, n).last > self.pairs_values(hand_one.value_counter, n).last
-    return :lose if self.pairs_values(hand_one.value_counter, n).last < self.pairs_values(hand_one.value_counter, n).last
-    return :win if self.pairs_values(hand_one.value_counter, x).first > self.pairs_values(hand_one.value_counter, x).first
-    return :lose if self.pairs_values(hand_one.value_counter, x).first < self.pairs_values(hand_one.value_counter, x).first
-    :tie
+    return :win if self.pairs_values(hand_one.value_counter, n).last > self.pairs_values(hand_two.value_counter, n).last
+    return :lose if self.pairs_values(hand_one.value_counter, n).last < self.pairs_values(hand_two.value_counter, n).last
+    return :tie if x == 0
+    return :win if self.pairs_values(hand_one.value_counter, x).first > self.pairs_values(hand_two.value_counter, x).first
+    return :lose if self.pairs_values(hand_one.value_counter, x).first < self.pairs_values(hand_two.value_counter, x).first
   end
 
   # determines which hand has the  highest card
