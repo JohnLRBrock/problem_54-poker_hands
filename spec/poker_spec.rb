@@ -8,7 +8,6 @@ describe Card do
     it "has a #suit of 'H'" do
       expect(ace_of_hearts.suit).to eql('H')
     end
-    let(:two_of_spades) { Card.new('2', 'S') }
   end
 end
 
