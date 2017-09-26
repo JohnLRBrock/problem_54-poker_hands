@@ -53,14 +53,12 @@ class Hand
     high_card.value == 14 && low_card.value == 2
   end
 
- # returns true if hand is flush
   def flush?
     bool = true
     @cards.each { |card| bool = false unless @cards[0].suit == card.suit }
     bool
   end
 
-  # returns true if hand is straight
   def straight?
     1.upto(4) do |i|
       next_card = false
